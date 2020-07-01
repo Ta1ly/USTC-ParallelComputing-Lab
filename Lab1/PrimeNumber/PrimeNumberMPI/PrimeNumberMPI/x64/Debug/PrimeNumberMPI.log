@@ -1,0 +1,3 @@
+﻿  PrimeNumberMPI.cpp
+D:\Code\ParallelComputing\Lab1\PrimeNumber\PrimeNumberMPI\PrimeNumberMPI\PrimeNumberMPI.cpp(23,6): warning C4101:  “flag”: 未引用的局部变量
+  PrimeNumberMPI.vcxproj -> D:\Code\ParallelComputing\Lab1\PrimeNumber\PrimeNumberMPI\x64\Debug\PrimeNumberMPI.exe
