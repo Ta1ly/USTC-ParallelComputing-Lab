@@ -3,67 +3,56 @@
 #include <stdio.h>
 #include "string.h"
 #pragma comment(lib,"msmpi.lib")
-int isPrime(int n)
-{
-	int  flag = 1;
-	for (int m = 2; m <= sqrt(n * 1.0); m++)
-	{
-		if (n % m == 0)
-		{
-			flag = 0;
-			break;
-		}
+int isPrime (int num) {
+	for (int i = 2; i <= sqrt ((double)num); i++) {
+		if (num % i == 0) return 1;
 	}
-	return flag;
+	return 0;
 }
-int main(int argc, char* argv[])
-{
-
-	int a, mypid, sum = 0, local = 0, size;
-	int flag;
+int main(int argc, char* argv[]){
+	int n = 1000000, sum = 0, local = 0;
+	int mypid, mpi_threads_num;
 	double starttime1, endtime1, starttime2, endtime2, t1, t2;
+
+	// MPI 初始化
 	MPI_Init(&argc, &argv);
 	MPI_Comm_rank(MPI_COMM_WORLD, &mypid);
-	MPI_Comm_size(MPI_COMM_WORLD, &size);
-	if (mypid == 0)
-	{
-		printf("a:");
-		scanf("%d", &a);
-	}
-	MPI_Bcast(&a, 1, MPI_INT, 0, MPI_COMM_WORLD);
-	starttime1 = MPI_Wtime();
-	for (int i = mypid * 2 + 1; i <= a; i += size * 2) //每个进程算自己的任务，保存在local中
-	{
-		local += isPrime(i);
+	MPI_Comm_size(MPI_COMM_WORLD, &mpi_threads_num);
 
+	// 信息传递
+	MPI_Bcast(&n, 1, MPI_INT, 0, MPI_COMM_WORLD);
+	starttime1 = MPI_Wtime();
+
+	// 计算质数数量并存储在本地local
+	for (int i = mypid * 2 + 1; i <= n; i += mpi_threads_num * 2) {
+		local += isPrime(i);
 	}
-	MPI_Reduce(&local, &sum, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);//进行归约，就是把所有进程的local加起来，得到总的素数个数
+
+	// 归约，将各个local中数据集中到sum中
+	MPI_Reduce(&local, &sum, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
 	endtime1 = MPI_Wtime();
 	t1 = endtime1 - starttime1;
-	if (mypid == 0)
-	{
-		printf("并行时间=%f\n", t1);
-		printf("并行素数个数是： %d\n", sum);
+
+	if (mypid == 0){
+		printf ("Parallel Computing in %d Threads\n", mpi_threads_num);
+		printf("time:	% f\n", t1);
+		printf("Prime num： %d\n\n", sum);
 	}
 
-
-
-
+	// 计算单线程时间和加速比
 	sum = 0;
 	starttime2 = MPI_Wtime();
-	if (mypid == 0)
-	{
-
-		for (int i = 1; i <= a; i += 2) //每个进程算自己的任务，保存在local中
-		{
+	if (mypid == 0){
+		for (int i = 1; i <= n; i += 2) {
 			sum += isPrime(i);
 		}
 		endtime2 = MPI_Wtime();
 		t2 = endtime2 - starttime2;
-		printf("串行素数个数是： %d\n", sum);
+		printf ("Serial Computing in Thread %d\n", mypid);
+		printf ("time:	% f\n", t2);
+		printf ("Prime num： %d\n\n", sum);
 
-		printf("串行时间=%f\n", t2);
-		printf("加速比是：%.9f", double(t2) / double(t1));
+		printf ("Speedup: %f", t2 / t1);
 	}
 	MPI_Finalize();
 	return 0;
