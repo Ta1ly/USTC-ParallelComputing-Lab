@@ -1,0 +1,5 @@
+﻿  N_body.cpp
+D:\Code\ParallelComputing\Lab3\N_body\N_body\N_body.cpp(66,8): warning C4244:  “初始化”: 从“double”转换到“int”，可能丢失数据
+D:\Code\ParallelComputing\Lab3\N_body\N_body\N_body.cpp(84,51): warning C4244:  “=”: 从“double”转换到“int”，可能丢失数据
+D:\Code\ParallelComputing\Lab3\N_body\N_body\N_body.cpp(64,24): warning C4101:  “t”: 未引用的局部变量
+  N_body.vcxproj -> D:\Code\ParallelComputing\Lab3\N_body\Debug\N_body.exe
