@@ -12,8 +12,7 @@ int isPrime (int num) {
 	return 1;
 }
 
-int main ()
-{
+int main (){
 	clock_t start, finish, t1, t2;
 	int sum = 0;
 	int sumi[THREADS_NUM] = {};
