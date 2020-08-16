@@ -1,0 +1,4 @@
+﻿  Sort.cpp
+D:\Code\ParallelComputing\Lab4\Sort\Sort\Sort.cpp(53,41): warning C4101:  “status”: 未引用的局部变量
+D:\Code\ParallelComputing\Lab4\Sort\Sort\Sort.cpp(48,24): warning C4101:  “t”: 未引用的局部变量
+  Sort.vcxproj -> D:\Code\ParallelComputing\Lab4\Sort\x64\Debug\Sort.exe
